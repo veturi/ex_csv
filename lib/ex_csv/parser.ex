@@ -48,13 +48,13 @@ defmodule ExCsv.Parser do
   # DELIMITER
   # At the beginning of a row
   defp build(<<char>> <> rest, [[] | previous_rows], %{delimiter: char, quoting: false} = config) do
-    current_row = [new_field, new_field]
+    current_row = [new_field(), new_field()]
     rows = [current_row | previous_rows]
     rest |> skip_whitespace |> build(rows, config)
   end
   # After the beginning of a row
   defp build(<<char>> <> rest, [[current_field | previous_fields] | previous_rows], %{delimiter: char, quoting: false} = config) do
-    current_row = [new_field | [current_field |> String.rstrip | previous_fields]]
+    current_row = [new_field() | [current_field |> String.trim_trailing | previous_fields]]
     rows = [current_row | previous_rows]
     rest |> skip_whitespace |> build(rows, config)
   end
@@ -110,8 +110,8 @@ defmodule ExCsv.Parser do
   defp build("", rows, config), do: {rows, config}
 
   defp build_newline(rest, current_field, previous_fields, previous_rows, config) do
-    current_row = [current_field |> String.rstrip | previous_fields]
-    rows = [new_row | [current_row | previous_rows]]
+    current_row = [current_field |> String.trim_trailing | previous_fields]
+    rows = [new_row() | [current_row | previous_rows]]
     rest |> skip_whitespace |> build(rows, config)
   end
 
@@ -129,6 +129,6 @@ defmodule ExCsv.Parser do
   defp skip_dotall(string), do: string
 
   defp new_field, do: ""
-  defp new_row, do: [new_field]
+  defp new_row, do: [new_field()]
 
 end

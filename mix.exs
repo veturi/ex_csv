@@ -2,11 +2,13 @@ defmodule ExCsv.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ex_csv,
-     version: "0.1.5",
-     elixir: "~> 1.0",
-     deps: deps,
-     package: package]
+    [
+      app: :ex_csv,
+      version: "0.1.5",
+      elixir: "~> 1.0",
+      deps: deps(),
+      package: package(),
+    ]
   end
 
   # Configuration for the OTP application
